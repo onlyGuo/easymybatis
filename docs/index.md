@@ -190,7 +190,7 @@ List<PersionPO> listPersionFriend(int pageNum, int length){
 ````
 #### DAO的高级用法(使用Mybatis特性: Mapper)
 继续以以上SQL为例, 将以上Sql使用Mapper模板来执行: 
-1.建立Mapper.xml
+1,建立Mapper.xml
 
 ````xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -206,7 +206,7 @@ List<PersionPO> listPersionFriend(int pageNum, int length){
     </select>
 </mapper>
 ````
-2.添加DAO方法映射
+2,添加DAO方法映射
 
 
 ````java
