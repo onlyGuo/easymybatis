@@ -69,7 +69,7 @@ public class PersionDao extends BaseDaoImpl<PersionPO, Long> {
 }
 ````
 #### 声明和使用DAO
-- 一个简单的代码实例, 无需写SQL, 简单的一行代码就实现了多条件, 分页, 排序等功能: 
+一个简单的代码实例, 无需写SQL, 简单的一行代码就实现了多条件, 分页, 排序等功能: 
 ````java
 /**
  * @author gsk 
