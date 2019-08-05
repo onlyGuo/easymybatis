@@ -129,6 +129,7 @@ public List<PersionPO> list(int age){
 ````
 #### DAO 的高级用法(自定义SQL)
 - 用法一, 封装自定义SQL
+
 > 直接在DAO实现类中添加自定义SQL方法即可, 假设每个人都有一个朋友, 
 并且他们是自关联的表, 这个时候要查询出所有小哥哥的女朋友, 并且分页展示, 
 这个时候需要执行一个比较复杂的SQL, 
@@ -139,7 +140,8 @@ SELECT res.* FROM persion_info WHERE res.id IN (
 ) res LIMIT 0, 10;
 
 ````
-- 让DAO原生支持这个SQL<br/>
+- 让DAO原生支持这个SQL
+
 只需建立这个SQL的实现方法即可.
 
 ````java
@@ -166,7 +168,8 @@ public class PersionDao extends BaseDaoImpl<PersionPO, Long> {
     }
 }
 ````
-- 使用内部函数优化SQL语句<br/>
+- 使用内部函数优化SQL语句
+
 在以上代码中, 要查询的字段是 res.*, 这个过程其实比较耗时, 我需要更规范的写法: `SELECT res.id, res.name, res.xxx ... FROM`这类的.
 再比如`SELECT friendId FROM persion_info`中的`persion_info`这个表名, 也是写死的, 假设表名变更或者字段变更的话, 
 则需要修改业务代码, 这个时候使用内部函数来动态得到要查询的字段和表名, 便可解决后期的SQL维护问题. 
@@ -188,6 +191,7 @@ List<PersionPO> listPersionFriend(int pageNum, int length){
 #### DAO的高级用法(使用Mybatis特性: Mapper)
 继续以以上SQL为例, 将以上Sql使用Mapper模板来执行: 
 1. 建立Mapper.xml
+
 ````xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
@@ -203,6 +207,7 @@ List<PersionPO> listPersionFriend(int pageNum, int length){
 </mapper>
 ````
 2. 添加DAO方法映射
+
 ````java
 /**
  * @author gsk 
@@ -232,6 +237,7 @@ public class PersionDao extends BaseDaoImpl<PersionPO, Long> {
     }
 }
 ````
+
 其实以上语句是可以使用强大的Method表达式动态生成的, 善用`Script`对象, 它可以生成你想要的SQL脚本而不执行它:
 ````java
 Method.where("id", C.IN, 
