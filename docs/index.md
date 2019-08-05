@@ -161,7 +161,7 @@ public class PersionDao extends BaseDaoImpl<PersionPO, Long> {
      */
     List<PersionPO> listPersionFriend(int pageNum, int length){
         int start = (pageNum - 1) * length;
-        String sql = "SELECT res.* FROM (" + 
+        String sql = "SELECT res.* FROM WHERE res.id IN (" + 
                      "    SELECT friendId FROM persion_info WHERE sex = ?" + 
                      ") res LIMIT ?, ?;";
         return list(sql, 1, start, length);
@@ -179,7 +179,7 @@ List<PersionPO> listPersionFriend(int pageNum, int length){
     int start = (pageNum - 1) * length;
     
     // 动态生成SQL, 填充字段列表和表名
-    String sql = "SELECT %s FROM (" + 
+    String sql = "SELECT %s FROM WHERE id IN (" + 
                  "    SELECT friendId FROM %s WHERE sex = ?" + 
                  ") LIMIT ?, ?;";
     sql = String.format(sql, selectSql(), tableName());
@@ -200,7 +200,7 @@ List<PersionPO> listPersionFriend(int pageNum, int length){
 
 <mapper namespace="com.front.pay.dao.PersionDao">
     <select id="listPersionFriend" parameterType="hashmap" resultMap="com.front.entity.PersionPO">
-        SELECT ${selectSql} FROM (
+        SELECT ${selectSql} FROM WHERE id IN(
             SELECT friendId FROM ${tableName} WHERE sex = #{sex}
         ) res LIMIT #{start}, #{length};
     </select>
