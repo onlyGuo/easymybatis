@@ -166,6 +166,7 @@ public List<PersionPO> list(int age){
 并且他们是自关联的表, 这个时候要查询出所有小哥哥的女朋友, 并且分页展示, 
 这个时候需要执行一个比较复杂的SQL, 
 如下:
+
 ````sql
 SELECT res.* FROM persion_info WHERE res.id IN (
     SELECT friendId FROM persion_info WHERE sex = 1
@@ -175,6 +176,7 @@ SELECT res.* FROM persion_info WHERE res.id IN (
 - 让DAO原生支持这个SQL
 
 只需建立这个SQL的实现方法即可.
+
 
 ````java
 /**
