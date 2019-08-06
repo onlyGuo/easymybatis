@@ -3,6 +3,7 @@
 ## 如何使用?
 #### 一, 通过maven直接引入
 在你的项目依赖中直接引入如下依赖即可
+
 ````xml
 <!-- EasyBatis集成 -->
 <dependency>
@@ -11,7 +12,9 @@
     <version>0.0.1.RELEASE</version>
 </dependency>
 ````
+
 #### 二, 拉取本项目的GitHub代码, 编译并安装到你的项目中
+
 1. 拉取 https://github.com/onlyGuo/easymybatis.git
 2. 执行`mvn clean install`以安装到你的仓库中
 3. 如果你是maven项目, 在pom中引入依赖; 如果你是javaEE项目, 将你编译好的jar包放到lib目录中.
