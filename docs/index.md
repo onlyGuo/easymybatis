@@ -164,8 +164,7 @@ public List<PersionPO> list(int age){
 
 > 直接在DAO实现类中添加自定义SQL方法即可, 假设每个人都有一个朋友, 
 并且他们是自关联的表, 这个时候要查询出所有小哥哥的女朋友, 并且分页展示, 
-这个时候需要执行一个比较复杂的SQL, 
-如下:
+这个时候需要执行一个比较复杂的SQL, 如下:
 
 ````sql
 SELECT res.* FROM persion_info WHERE res.id IN (
@@ -208,6 +207,7 @@ public class PersionDao extends BaseDaoImpl<PersionPO, Long> {
 再比如`SELECT friendId FROM persion_info`中的`persion_info`这个表名, 也是写死的, 假设表名变更或者字段变更的话, 
 则需要修改业务代码, 这个时候使用内部函数来动态得到要查询的字段和表名, 便可解决后期的SQL维护问题. 
 如下:
+
 ````java
 List<PersionPO> listPersionFriend(int pageNum, int length){
     int start = (pageNum - 1) * length;
