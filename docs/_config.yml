@@ -1,2 +1,8 @@
 title: EasyMybatis
 theme: jekyll-theme-cayman
+
+site:
+  posts:
+    date: aaa
+    url: bbb
+    title: ccc
