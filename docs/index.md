@@ -1,4 +1,17 @@
 EasyMybatis基本使用文档
+## 如可使用?
+#### 通过maven直接引入
+在你的项目依赖中直接引入如下依赖即可
+````xml
+<!-- EasyBatis集成 -->
+<dependency>
+    <groupId>com.easymybatis.freamwork</groupId>
+    <artifactId>spring-easymybatis-core</artifactId>
+    <version>0.0.1.RELEASE</version>
+</dependency>
+````
+
+
 ## 实体类定义
 为保证实体类多项目的通用性, 不要将新的实体类定义到你应用的项目中.
 应抽离出来, 定义在`entity`项目中, 以此来供给多个项目引用使用. 
