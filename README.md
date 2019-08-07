@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="logo" src="https://easymybatis.com/logo.png">
+  <img alt="logo" height=640 width=320 src="https://easymybatis.com/logo.png">
 </p>
 
 <p align="center">
