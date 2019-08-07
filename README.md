@@ -1,10 +1,39 @@
-# easymybatis
-Automatically generate SQL statements for Mybatis
+使用EasyMybatis, 可以省去你编写mapper文件的烦恼. 甚至省去你自动生成代码的操作! 你无需再因为数据库中某个字段的改动而去修改编大量的xml, 甚至你无需生成死板的sql模板和mapper文件, EasyMybatis在每次程序启动时会根据你的实体类在内存中直接生成你需要的SQL, 和Mapper. 他不会释放文件到内存, 也不会生成繁琐的代码, 使你的项目看起来更清爽.
 
-EasyMybatis基本使用文档
+## 解决的痛点
+- 不用每个实体类都要定义一个mapper文件.
+- 不用编写重复的增删改查的SQL.
+- 不用自动生成繁琐的且重复的增删改查的Mapper文件.
+- 降低Mapper文件数, 降低代码行数, 提高阅读性.
+- 动态在内存中生成Mapper副本, 不用因为数据库中一个字段的微小改动而去修改大量的Mapper文件.
+- 降低了SQL后期的维护风险.
+- 根据业务动态生成理想的SQL.
+- 防止某类SQL拼接造成的SQL注入风险.
+- 实现以上功能时, 保留了Mybatis原生的所有特性.
+- 可以抽出更多时间陪你的夫人.
+
+## 如何使用?
+#### 方法一, 通过maven直接引入
+在你的项目依赖中直接引入如下依赖即可
+
+````xml
+<!-- EasyBatis集成 -->
+<dependency>
+    <groupId>com.easymybatis.freamwork</groupId>
+    <artifactId>spring-easymybatis-core</artifactId>
+    <version>0.0.1.RELEASE</version>
+</dependency>
+````
+
+#### 方法二, 拉取本项目的GitHub代码, 编译并安装到你的项目中
+
+1. 拉取 https://github.com/onlyGuo/easymybatis.git
+2. 执行`mvn clean install`以安装到你的仓库中
+3. 如果你是maven项目, 在pom中引入依赖; 如果你是javaEE项目, 将你编译好的jar包放到lib目录中.
+
 ## 实体类定义
 为保证实体类多项目的通用性, 不要将新的实体类定义到你应用的项目中.
-应抽离出来, 定义在`entity`项目中, 以此来供给多个项目引用使用. 
+应抽离出来, 定义在一个独立的项目中, 以此来供给多个项目引用使用. 
 主要解决以下问题:
 - 方便管理;
 - 避免了在项目之间通信的时候, 由于两方所使用的实体类字段不一致导致数据异常的问题
@@ -135,8 +164,8 @@ public List<PersionPO> list(int age){
 
 > 直接在DAO实现类中添加自定义SQL方法即可, 假设每个人都有一个朋友, 
 并且他们是自关联的表, 这个时候要查询出所有小哥哥的女朋友, 并且分页展示, 
-这个时候需要执行一个比较复杂的SQL, 
-如下:
+这个时候需要执行一个比较复杂的SQL, 如下:
+
 ````sql
 SELECT res.* FROM persion_info WHERE res.id IN (
     SELECT friendId FROM persion_info WHERE sex = 1
@@ -146,6 +175,7 @@ SELECT res.* FROM persion_info WHERE res.id IN (
 - 让DAO原生支持这个SQL
 
 只需建立这个SQL的实现方法即可.
+
 
 ````java
 /**
@@ -164,7 +194,7 @@ public class PersionDao extends BaseDaoImpl<PersionPO, Long> {
      */
     List<PersionPO> listPersionFriend(int pageNum, int length){
         int start = (pageNum - 1) * length;
-        String sql = "SELECT res.* FROM (" + 
+        String sql = "SELECT res.* FROM WHERE res.id IN (" + 
                      "    SELECT friendId FROM persion_info WHERE sex = ?" + 
                      ") res LIMIT ?, ?;";
         return list(sql, 1, start, length);
@@ -177,12 +207,13 @@ public class PersionDao extends BaseDaoImpl<PersionPO, Long> {
 再比如`SELECT friendId FROM persion_info`中的`persion_info`这个表名, 也是写死的, 假设表名变更或者字段变更的话, 
 则需要修改业务代码, 这个时候使用内部函数来动态得到要查询的字段和表名, 便可解决后期的SQL维护问题. 
 如下:
+
 ````java
 List<PersionPO> listPersionFriend(int pageNum, int length){
     int start = (pageNum - 1) * length;
     
     // 动态生成SQL, 填充字段列表和表名
-    String sql = "SELECT %s FROM (" + 
+    String sql = "SELECT %s FROM WHERE id IN (" + 
                  "    SELECT friendId FROM %s WHERE sex = ?" + 
                  ") LIMIT ?, ?;";
     sql = String.format(sql, selectSql(), tableName());
@@ -203,7 +234,7 @@ List<PersionPO> listPersionFriend(int pageNum, int length){
 
 <mapper namespace="com.front.pay.dao.PersionDao">
     <select id="listPersionFriend" parameterType="hashmap" resultMap="com.front.entity.PersionPO">
-        SELECT ${selectSql} FROM (
+        SELECT ${selectSql} FROM WHERE id IN(
             SELECT friendId FROM ${tableName} WHERE sex = #{sex}
         ) res LIMIT #{start}, #{length};
     </select>
