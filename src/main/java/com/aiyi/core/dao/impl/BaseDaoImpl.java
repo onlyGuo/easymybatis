@@ -124,7 +124,7 @@ public class BaseDaoImpl<T extends PO, PK extends Serializable> implements BaseD
 		paramMap.put("_sql", sql.toString());
 		paramMap.put("id", id);
 
-		logger.debug("SQL => \n{}", FormatStyle.BASIC.getFormatter().format(insertSql.toString()));
+		logger.debug("SQL => \n{}", FormatStyle.BASIC.getFormatter().format(sql.toString()));
 		Map<String, Object> resultMap = sqlSessionTemplate.selectOne("excuteQuerySql", paramMap);
 		return handleResult(resultMap, this.entityClass);
 	}
