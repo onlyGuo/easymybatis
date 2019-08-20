@@ -38,11 +38,16 @@
 <dependency>
     <groupId>com.easymybatis.freamwork</groupId>
     <artifactId>spring-easymybatis-core</artifactId>
-    <version>0.0.1.RELEASE</version>
+    <version>0.0.2.RELEASE</version>
 </dependency>
 ````
+#### 方法二, 通过Gradle直接引入
+````
+implementation 'com.easymybatis.freamwork:spring-easymybatis-core:0.0.2.RELEASE'
+````
 
-#### 方法二, 拉取本项目的GitHub代码, 编译并安装到你的项目中
+
+#### 方法三, 拉取本项目的GitHub代码, 编译并安装到你的项目中
 
 1. 拉取 https://github.com/onlyGuo/easymybatis.git
 2. 执行`mvn clean install`以安装到你的仓库中
