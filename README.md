@@ -15,7 +15,7 @@
   </a>
 </p>
 
-使用EasyMybatis, 可以省去你编写mapper文件的烦恼. 甚至省去你自动生成代码的操作! 你无需再因为数据库中某个字段的改动而去修改编大量的xml, 甚至你无需生成死板的sql模板和mapper文件, EasyMybatis在每次程序启动时会根据你的实体类在内存中直接生成你需要的SQL, 和Mapper. 他不会释放文件到内存, 也不会生成繁琐的代码, 使你的项目看起来更清爽.
+使用EasyMybatis, 可以省去你编写mapper文件的烦恼. 甚至省去你自动生成代码的操作! 你无需再因为数据库中某个字段的改动而去修改编大量的xml, 甚至你无需生成死板的sql模板和mapper文件, EasyMybatis在每次程序启动时会根据你的实体类在内存中直接生成你需要的SQL, 和Mapper. 他不会释放文件到硬盘, 也不会生成繁琐的代码, 使你的项目看起来更清爽.
 
 ## 解决的痛点
 - 不用每个实体类都要定义一个mapper文件.
@@ -38,11 +38,16 @@
 <dependency>
     <groupId>com.easymybatis.freamwork</groupId>
     <artifactId>spring-easymybatis-core</artifactId>
-    <version>0.0.1.RELEASE</version>
+    <version>0.0.2.RELEASE</version>
 </dependency>
 ````
+#### 方法二, 通过Gradle直接引入
+````
+implementation 'com.easymybatis.freamwork:spring-easymybatis-core:0.0.2.RELEASE'
+````
 
-#### 方法二, 拉取本项目的GitHub代码, 编译并安装到你的项目中
+
+#### 方法三, 拉取本项目的GitHub代码, 编译并安装到你的项目中
 
 1. 拉取 https://github.com/onlyGuo/easymybatis.git
 2. 执行`mvn clean install`以安装到你的仓库中
