@@ -100,7 +100,7 @@ public interface BaseDao<T extends PO, PK extends Serializable> {
 	 * @param sql 自定义的sql语句
 	 * @return 受到影响的记录数
 	 */
-	int excuse(String sql, Object... params);
+	int execute(String sql, Object... params);
 	
 	/**
 	 * 获取当前表中符合指定条件的记录数量

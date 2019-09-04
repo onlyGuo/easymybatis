@@ -12,7 +12,7 @@
     <packaging>jar</packaging>
     <artifactId>spring-easymybatis-core</artifactId>
     <groupId>com.easymybatis.freamwork</groupId>
-    <version>0.0.2.RELEASE</version>
+    <version>0.0.4.RELEASE</version>
     <name>spring-easymybatis-core</name>
     <description>Automatically generate SQL statements for Mybatis</description>
 
@@ -20,6 +20,11 @@
     <licenses>
         <license>
             <name>GNU Affero General Public License v3.0</name>
+            <url>https://raw.githubusercontent.com/onlyGuo/easymybatis/master/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+        <license>
+            <name>NPL (The 996 Public License) v1.0</name>
             <url>https://raw.githubusercontent.com/onlyGuo/easymybatis/master/LICENSE</url>
             <distribution>repo</distribution>
         </license>
@@ -34,6 +39,11 @@
         <developer>
             <name>guoshengkai</name>
             <email>719348277@qq.com</email>
+            <url>https://github.com/onlyGuo/easymybatis</url>
+        </developer>
+        <developer>
+            <name>chenhaisheng</name>
+            <email>2775782453@qq.com</email>
             <url>https://github.com/onlyGuo/easymybatis</url>
         </developer>
     </developers>
@@ -57,7 +67,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.47</version>
+            <version>1.2.59</version>
         </dependency>
     </dependencies>
 

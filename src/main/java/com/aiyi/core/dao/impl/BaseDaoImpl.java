@@ -257,10 +257,10 @@ public class BaseDaoImpl<T extends PO, PK extends Serializable> implements BaseD
 	}
 
 	@Override
-	public int excuse(String sql, Object... params) {
+	public int execute(String sql, Object... params) {
 		Map<String, Object> sqlParamsMap = getSqlParamsMap(sql, params);
 		logger.debug("SQL => \n{}", FormatStyle.BASIC.getFormatter().format(sql.toString()));
-		return sqlSessionTemplate.update("excuteUpdateSql", sql);
+		return sqlSessionTemplate.update("excuteUpdateSql", sqlParamsMap);
 	}
 
 	@Override
