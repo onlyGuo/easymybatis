@@ -10,7 +10,7 @@
     <img alt="996icu" src="https://img.shields.io/badge/license-NPL%20(The%20996%20Prohibited%20License)-blue.svg">
   </a>
 
-  <a href="https://www.apache.org/licenses/LICENSE-2.0">
+  <a href="https://github.com/onlyGuo/easymybatis/blob/master/LICENSE">
     <img alt="code style" src="https://img.shields.io/github/license/onlyGuo/nginx-gui.svg?style=popout">
   </a>
 </p>
@@ -31,7 +31,7 @@
 ## 交流QQ群：
 274862188
 ## 如何使用?
-#### 方法一, 通过maven直接引入
+#### 通过maven直接引入
 在你的项目依赖中直接引入如下依赖即可
 
 ````xml
@@ -42,13 +42,13 @@
     <version>0.0.4.RELEASE</version>
 </dependency>
 ````
-#### 方法二, 通过Gradle直接引入
+#### 通过Gradle直接引入
 ````
 implementation 'com.easymybatis.freamwork:spring-easymybatis-core:0.0.2.RELEASE'
 ````
 
 
-#### 方法三, 拉取本项目的GitHub代码, 编译并安装到你的项目中
+#### 拉取本项目的GitHub代码, 编译并安装到你的项目中
 
 1. 拉取 https://github.com/onlyGuo/easymybatis.git
 2. 执行`mvn clean install`以安装到你的仓库中
