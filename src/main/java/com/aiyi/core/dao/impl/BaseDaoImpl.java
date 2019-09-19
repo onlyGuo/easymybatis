@@ -208,6 +208,15 @@ public class BaseDaoImpl<T extends PO, PK extends Serializable> implements BaseD
 	}
 
 	@Override
+	public List<T> list(String sql, WherePrams wherePrams) {
+		sql += wherePrams.getWherePrams();
+		Map<String, Object> whereMap = wherePrams.getWhereMap();
+		whereMap.put("_sql", sql);
+		logger.debug("SQL => \n{}", FormatStyle.BASIC.getFormatter().format(sql));
+		return queryList(whereMap);
+	}
+
+	@Override
 	public int update(T po) {
 		Serializable id = sqlUtil.getFileValue(po, this.idName);
 

@@ -63,7 +63,17 @@ public interface BaseDao<T extends PO, PK extends Serializable> {
 	 * @return
 	 */
 	List<T> list(String sql, Object... params);
-	
+
+	/**
+	 * 通过自定义SQL和条件表达式查询记录列表
+	 * @param sql
+	 * 		SQL脚本
+	 * @param wherePrams
+	 * 		条件表达式
+	 * @return
+	 */
+	List<T> list(String sql, WherePrams wherePrams);
+
 	/**
 	 * 更新一条记录中的全部字段值为指定实体类中字段的直
 	 * @param po 对应数据表的实体类

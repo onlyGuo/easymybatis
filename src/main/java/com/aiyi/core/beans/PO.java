@@ -61,7 +61,7 @@ public class PO {
           throw new IllegalArgumentException(fieldName + "内容长度不能小于" + validation.minLength() + "位字符");
         }
         if (validation.maxLength() != 0 && validation.maxLength() < ((String) value).length()) {
-          throw new IllegalArgumentException(fieldName + "内容长度不能大于" + validation.minLength() + "位字符");
+          throw new IllegalArgumentException(fieldName + "内容长度不能大于" + validation.maxLength() + "位字符");
         }
       } else if (value instanceof Number) {
         if (Double.valueOf(value.toString()).doubleValue() < validation.minValue()) {
