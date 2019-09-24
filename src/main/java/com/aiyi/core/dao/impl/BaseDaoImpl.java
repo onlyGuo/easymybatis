@@ -338,8 +338,23 @@ public class BaseDaoImpl<T extends PO, PK extends Serializable> implements BaseD
 					throw new IllegalArgumentException("Sql params index out of range!");
 				}
 
-				newSql.append("#{_p_" + count + "}");
-				paramMap.put("_p_" + count, params[count]);
+				if (params[count] instanceof Collection){
+					Collection collection = (Collection)params[count];
+					Iterator iterator = collection.iterator();
+					StringBuffer buffer = new StringBuffer();
+					buffer.append('(');
+					while (iterator.hasNext()){
+						buffer.append("'").append(iterator.next()).append("'");
+						if (iterator.hasNext()){
+							buffer.append(", ");
+						}
+					}
+					buffer.append(")");
+					newSql.append(buffer);
+				}else{
+					newSql.append("#{_p_" + count + "}");
+					paramMap.put("_p_" + count, params[count]);
+				}
 
 				count++;
 
