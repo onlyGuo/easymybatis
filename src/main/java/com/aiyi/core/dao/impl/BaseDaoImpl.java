@@ -113,7 +113,7 @@ public class BaseDaoImpl<T extends PO, PK extends Serializable> implements BaseD
 		if(null == pkValue) {
 			pkValue = getId();
 		}
-		SqlUtil.setFileValue(po, this.idName, getId());
+		SqlUtil.setFileValue(po, this.idName, pkValue);
 		return result;
 	}
 
