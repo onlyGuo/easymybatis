@@ -1,3 +1,6 @@
 {
-  "GeneralAgent": "2020-12-30"
+  "GeneralAgent": {
+    "endDate": "2020-12-30",
+    "dscp": "server root agent"
+  }
 }
