@@ -194,9 +194,11 @@ public class ThreadUtil {
      */
     public static void setCacheData(String key, Object value) {
         Map<String, Object> data = get("cacheData");
-        if (null != data) {
-            data.put(key, value);
+        if (null == data) {
+            data = new HashMap<>();
         }
+        data.put(key, value);
+        set("cacheData", data);
     }
 
     /**
@@ -206,7 +208,7 @@ public class ThreadUtil {
      * @Author : 郭胜凯
      */
     public static <T> void setUserEntity(T user) {
-        setCacheData("_IN_USER_ENEITY", user);
+        set("_IN_USER_ENEITY", user);
     }
 
     /**
@@ -216,7 +218,7 @@ public class ThreadUtil {
      * @Author : 郭胜凯
      */
     public static <T> T getUserEntity() {
-        return getCacheData("_IN_USER_ENEITY");
+        return get("_IN_USER_ENEITY");
     }
 
     /**
