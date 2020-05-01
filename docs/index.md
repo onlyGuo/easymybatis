@@ -1,5 +1,7 @@
 <p align="center">
-  <img alt="logo" height=320 width=640 src="https://easymybatis.com/logo.png">
+  ![logo](logo.png)
+</p>
+<p align="center">
   <a href="https://search.maven.org/artifact/com.easymybatis.freamwork/spring-easymybatis-core">
     <img alt="996icu" src="https://img.shields.io/maven-central/v/com.easymybatis.freamwork/spring-easymybatis-core">
   </a>
