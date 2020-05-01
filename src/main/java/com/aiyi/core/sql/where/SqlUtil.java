@@ -289,7 +289,14 @@ public class SqlUtil<T extends PO> {
         try {
 			String typeName = propertyDescriptor.getPropertyType().getTypeName();
 			if (typeName.equals("int") || typeName.equals(Integer.class.getName())){
-				writeMethod.invoke(po, Integer.valueOf(String.valueOf(fileValue)));
+				String s = String.valueOf(fileValue);
+				if ("TRUE".equals(s.toUpperCase()) || "Y".equals(s.toUpperCase())){
+					writeMethod.invoke(po, 1);
+				}else if ("FALSE".equals(s.toUpperCase()) || "N".equals(s.toUpperCase())){
+					writeMethod.invoke(po, 0);
+				}else{
+					writeMethod.invoke(po, Integer.valueOf(s));
+				}
 			}else if(typeName.equals("long") || typeName.equals(Long.class.getName())){
 				writeMethod.invoke(po, Long.valueOf(String.valueOf(fileValue)));
 			}else if(typeName.equals("boolean") || typeName.equals(Boolean.class.getName())){
