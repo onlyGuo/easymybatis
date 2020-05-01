@@ -1,6 +1,3 @@
-<p align="center">
-  <img alt="logo" height=320 width=640 src="logo.png">
-</p>
 
 <p align="center">
   <a href="https://search.maven.org/artifact/com.easymybatis.freamwork/spring-easymybatis-core">
