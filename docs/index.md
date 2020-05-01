@@ -37,7 +37,7 @@
 <dependency>
     <groupId>com.easymybatis.freamwork</groupId>
     <artifactId>spring-easymybatis-core</artifactId>
-    <version>0.0.8.RELEASE</version>
+    <version>0.0.9.RELEASE</version>
 </dependency>
 ````
 
