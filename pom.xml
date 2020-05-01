@@ -12,11 +12,15 @@
     <packaging>jar</packaging>
     <artifactId>spring-easymybatis-core</artifactId>
     <groupId>com.easymybatis.freamwork</groupId>
-    <version>0.0.9.RELEASE</version>
+    <version>0.1.0.RELEASE</version>
     <name>spring-easymybatis-core</name>
+    <url>https://easymybatis.com</url>
     <description>Automatically generate SQL statements for Mybatis</description>
 
-
+    <organization>
+        <name>GuoShengkai</name>
+        <url>https://easymybatis.com</url>
+    </organization>
     <licenses>
         <license>
             <name>GNU Affero General Public License v3.0</name>

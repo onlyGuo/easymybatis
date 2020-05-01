@@ -169,7 +169,7 @@ public class WherePrams {
 		if (this == prams){
 			throw new RuntimeException("Unsolvable infinite nesting!");
 		}
-		this.pram.append(" AND (").append(prams.pram.substring(6)).append(")");
+		this.pram.append(" AND (").append(parseSubWhere(prams)).append(")");
 		return this;
 	}
 
@@ -210,8 +210,26 @@ public class WherePrams {
 		if (this == prams){
 			throw new RuntimeException("Unsolvable infinite nesting!");
 		}
-		this.pram.append(" OR (").append(prams.pram.substring(6)).append(")");
+		this.pram.append(" OR (").append(parseSubWhere(prams)).append(")");
 		return this;
+	}
+
+	/**
+	 * 格式化子Where条件
+	 * @param prams
+	 * 		子Where条件
+	 * @return
+	 */
+	private String parseSubWhere(WherePrams prams){
+		String subWhere = prams.pram.substring(6);
+		Set<String> subParamKeys = prams.whereMap.keySet();
+		for (String key: subParamKeys){
+			String index = String.valueOf(whereMap.size());
+			String format = String.format("param_%s", index);
+			whereMap.put(format, prams.whereMap.get(key));
+			subWhere = subWhere.replace("#{" + key + "}", "#{" + format + "}");
+		}
+		return subWhere;
 	}
 
 	/**
