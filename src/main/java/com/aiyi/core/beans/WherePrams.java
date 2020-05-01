@@ -282,4 +282,11 @@ public class WherePrams {
 	public Map<String, Object> getWhereMap(){
 		return whereMap;
 	}
+
+	/**
+	 * 清除分页信息
+	 */
+	public void clearLimit(){
+		this.limit = null;
+	}
 }

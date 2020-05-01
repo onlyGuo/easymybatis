@@ -1,6 +1,7 @@
 package com.aiyi.core.dao;
 
 import com.aiyi.core.beans.PO;
+import com.aiyi.core.beans.ResultPage;
 import com.aiyi.core.beans.WherePrams;
 
 import java.io.Serializable;
@@ -53,6 +54,18 @@ public interface BaseDao<T extends PO, PK extends Serializable> {
 	 * @return List<T> 获取到的记录列表
 	 */
 	List<T> list(WherePrams where);
+
+	/**
+	 * 分页获取符合条件的记录列表
+	 * @param where
+	 * 		条件表达式
+	 * @param page
+	 * 		页码
+	 * @param size
+	 * 		每页条数
+	 * @return
+	 */
+	ResultPage<T> list(WherePrams where, int page, int size);
 
 	/**
 	 * 通过自定义Sql来查询记录列表

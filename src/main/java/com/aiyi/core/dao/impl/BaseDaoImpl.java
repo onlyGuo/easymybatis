@@ -199,6 +199,14 @@ public class BaseDaoImpl<T extends PO, PK extends Serializable> implements BaseD
 		return queryList(paramMap);
 	}
 
+	@Override
+	public ResultPage<T> list(WherePrams where, int page, int size) {
+		where.clearLimit();
+		long count = count(where);
+		List<T> list = list(where.limit((page - 1) * size, size));
+		return new ResultPage<>(count, page, size, list);
+	}
+
 
 	@Override
 	public List<T> list(String sql, Object... params) {
