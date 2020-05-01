@@ -149,6 +149,31 @@ public class WherePrams {
 	}
 
 	/**
+	 * 特殊脚本的And条件
+	 * @param script
+	 * 		脚本对象
+	 * @return
+	 */
+	public WherePrams and(Script script){
+		this.pram.append(" AND ").append(script.toString());
+		return this;
+	}
+
+	/**
+	 * 嵌套子条件的And条件
+	 * @param prams
+	 * 		子条件
+	 * @return
+	 */
+	public WherePrams and(WherePrams prams){
+		if (this == prams){
+			throw new RuntimeException("Unsolvable infinite nesting!");
+		}
+		this.pram.append(" AND (").append(prams.pram.substring(6)).append(")");
+		return this;
+	}
+
+	/**
 	 * Or 条件
 	 * @param field
 	 * 		字段名
@@ -161,6 +186,31 @@ public class WherePrams {
 	public WherePrams or(String field, C c, Object value){
 		StringBuffer buffer = parseWhereExpression(field, c, value);
 		this.pram.append(" OR ").append(buffer);
+		return this;
+	}
+
+	/**
+	 * 特殊脚本的OR条件
+	 * @param script
+	 * 		脚本对象
+	 * @return
+	 */
+	public WherePrams or(Script script){
+		this.pram.append(" OR ").append(script);
+		return this;
+	}
+
+	/**
+	 * 嵌套子条件的OR条件
+	 * @param prams
+	 * 		子条件
+	 * @return
+	 */
+	public WherePrams or(WherePrams prams){
+		if (this == prams){
+			throw new RuntimeException("Unsolvable infinite nesting!");
+		}
+		this.pram.append(" OR (").append(prams.pram.substring(6)).append(")");
 		return this;
 	}
 
