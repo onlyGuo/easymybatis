@@ -5,13 +5,19 @@ import com.aiyi.core.annotation.po.FieldType;
 import com.aiyi.core.plugins.PluginManager;
 import com.aiyi.core.plugins.field.FieldTypeFmt;
 import com.aiyi.core.sql.where.C;
+import com.aiyi.core.test.TestTable1PO;
+import com.aiyi.core.test.TestTable2PO;
 import com.aiyi.core.util.DateUtil;
+import com.aiyi.core.util.lambda.LambdaUtil;
+import com.aiyi.core.util.lambda.SFunction;
 import com.alibaba.fastjson.JSON;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * 条件参数封装类
@@ -90,6 +96,10 @@ public class WherePrams {
 	 */
 	private StringBuffer parseWhereExpression(String field, C c, Object value){
 		String where = parseComparator(c, value);
+		if (value.toString().contains(".")){
+			return new StringBuffer(field).append(" ").append(where).append(" ")
+					.append(value);
+		}
 		String index = String.valueOf(whereMap.size());
 		if (c == C.LIKE){
 			whereMap.put(String.format("param_%s", index), "%" + value + "%");
@@ -123,7 +133,15 @@ public class WherePrams {
 				.append(String.format("#{param_%s}", index));
 	}
 
-
+	/**
+	 * 基本条件表达式创建
+	 * @param field
+	 * 		比较字段
+	 * @param c
+	 * 		比较类型
+	 * @param value
+	 * 		参考值
+	 */
 	public WherePrams(String field, C c, Object value){
 		if(null == field && null == c && value == c.value()){
 			return;
@@ -131,7 +149,25 @@ public class WherePrams {
 		StringBuffer buffer = parseWhereExpression(field, c, value);
 		this.pram = new StringBuffer("WHERE ").append(buffer);
 	}
-	
+
+	/**
+	 * 高级条件表达式(支持外表关联查询)
+	 * @param fieldFun
+	 * 		表名对应的实体字段操作方法
+	 * @param c
+	 * 		比较类型
+	 * @param value
+	 * 		参考值
+	 */
+	public <T>WherePrams(SFunction<T, ?> fieldFun, C c, Object value){
+		String field = LambdaUtil.getTableName(fieldFun);
+		if(null == field && null == c && value == c.value()){
+			return;
+		}
+		StringBuffer buffer = parseWhereExpression(field, c, value);
+		this.pram = new StringBuffer("WHERE ").append(buffer);
+	}
+
 	/**
 	 * and条件
 	 * @param field
@@ -144,6 +180,31 @@ public class WherePrams {
 	 */
 	public WherePrams and(String field, C c, Object value){
 		StringBuffer buffer = parseWhereExpression(field, c, value);
+		this.pram.append(" AND ").append(buffer);
+		return this;
+	}
+
+	/**
+	 * and条件, 可支持外表关联查询
+	 * @param field
+	 *		对应表的实体类字段操作方法表达式
+	 * @param c
+	 * 		比较符
+	 * @param value
+	 * 		比较值
+	 * @return
+	 */
+	public <T> WherePrams and(SFunction<T, ?> field, C c, Object value){
+		String tableName = LambdaUtil.getTableName(field);
+		StringBuffer buffer = parseWhereExpression(tableName, c, value);
+		this.pram.append(" AND ").append(buffer);
+		return this;
+	}
+
+	public <T, J> WherePrams and(SFunction<T, ?> field, C c, SFunction<J, ?> value) {
+		String tableName = LambdaUtil.getTableName(field);
+		String v = LambdaUtil.getTableName(value);
+		StringBuffer buffer = parseWhereExpression(tableName, c, v);
 		this.pram.append(" AND ").append(buffer);
 		return this;
 	}
@@ -185,6 +246,28 @@ public class WherePrams {
 	 */
 	public WherePrams or(String field, C c, Object value){
 		StringBuffer buffer = parseWhereExpression(field, c, value);
+		this.pram.append(" OR ").append(buffer);
+		return this;
+	}
+
+	/**
+	 * Or 条件
+	 * @param field
+	 * 		数据库表名对应的实体类字段表达式
+	 * @param c
+	 * 		比较符
+	 * @param value
+	 * 		字段值
+	 * @return
+	 */
+	public <T> WherePrams or(SFunction<T, ?> field, C c, Object value){
+		StringBuffer buffer = parseWhereExpression(LambdaUtil.getTableName(field), c, value);
+		this.pram.append(" OR ").append(buffer);
+		return this;
+	}
+
+	public <T, J> WherePrams or(SFunction<T, ?> field, C c, SFunction<J, ?> value){
+		StringBuffer buffer = parseWhereExpression(LambdaUtil.getTableName(field), c, LambdaUtil.getTableName(value));
 		this.pram.append(" OR ").append(buffer);
 		return this;
 	}
@@ -289,4 +372,5 @@ public class WherePrams {
 	public void clearLimit(){
 		this.limit = null;
 	}
+
 }

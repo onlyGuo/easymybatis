@@ -1,8 +1,10 @@
 package com.aiyi.core.dao;
 
+import com.aiyi.core.beans.LeftJoin;
 import com.aiyi.core.beans.PO;
 import com.aiyi.core.beans.ResultPage;
 import com.aiyi.core.beans.WherePrams;
+import com.aiyi.core.util.lambda.SFunction;
 
 import java.io.Serializable;
 import java.util.List;
@@ -66,6 +68,30 @@ public interface BaseDao<T extends PO, PK extends Serializable> {
 	 * @return
 	 */
 	ResultPage<T> list(WherePrams where, int page, int size);
+
+	/**
+	 * 多表关联查询
+	 * @param where
+	 * 		条件表达式
+	 * @param joins
+	 * 		关联外表
+	 * @return
+	 */
+	List<T> list(WherePrams where, LeftJoin joins);
+
+	/**
+	 * 分页多表关联查询
+	 * @param where
+	 * 		条件表达式
+	 * @param joins
+	 * 		关联外表
+	 * @param page
+	 * 		页码
+	 * @param size
+	 * 		每页条数
+	 * @return
+	 */
+	ResultPage<T> list(WherePrams where, LeftJoin joins, int page, int size);
 
 	/**
 	 * 通过自定义Sql来查询记录列表

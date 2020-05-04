@@ -194,7 +194,7 @@ public class SqlUtil<T extends PO> {
      * @Creation Date : 2018/5/16 下午5:21
      * @Author : 郭胜凯
      */
-	public String getTableName(Class<T> po){
+	public String getTableName(Class<? extends PO> po){
 		if(po.isAnnotationPresent(TableName.class)){
 			return po.getAnnotation(TableName.class).name();
 		}else{
@@ -302,7 +302,7 @@ public class SqlUtil<T extends PO> {
 			}else if(typeName.equals("boolean") || typeName.equals(Boolean.class.getName())){
 				boolean v = false;
 				if (null != fileValue && !"0".equalsIgnoreCase(fileValue.toString()) &&
-						!"N".equalsIgnoreCase(fileValue.toString())){
+						!"N".equalsIgnoreCase(fileValue.toString()) && !"FALSE".equalsIgnoreCase(fileValue.toString())){
 					v = true;
 				}
 				writeMethod.invoke(po, v);

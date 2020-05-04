@@ -5,8 +5,12 @@ import com.aiyi.core.dao.BaseDao;
 import com.aiyi.core.exception.ServiceInvokeException;
 import com.aiyi.core.sql.where.C;
 import com.aiyi.core.sql.where.SqlUtil;
+import com.aiyi.core.test.TestTable1PO;
+import com.aiyi.core.test.TestTable2PO;
 import com.aiyi.core.util.GenericsUtils;
 import com.aiyi.core.util.hibernate.jdbc.util.FormatStyle;
+import com.aiyi.core.util.lambda.LambdaUtil;
+import com.aiyi.core.util.lambda.SFunction;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -207,6 +211,35 @@ public class BaseDaoImpl<T extends PO, PK extends Serializable> implements BaseD
 		return new ResultPage<>(count, page, size, list);
 	}
 
+	@Override
+	public List<T> list(WherePrams where, LeftJoin joins) {
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.putAll(where.getWhereMap());
+		StringBuffer select = getSelectSqlByOtherTable(joins, paramMap);
+		select.append(" ").append(where.getWherePrams());
+		paramMap.put("_sql", select.toString());
+		logger.debug("SQL => \n{}", FormatStyle.BASIC.getFormatter().format(select.toString()));
+		return queryList(paramMap);
+	}
+
+	@Override
+	public ResultPage<T> list(WherePrams where, LeftJoin joins, int page, int size) {
+		StringBuffer select = new StringBuffer("SELECT COUNT(*) AS COUNT FROM ");
+		select.append(tableName()).append(" ");
+		Map<String, Object> whereMap = where.getWhereMap();
+		getSelectTableSqlByOtherTable(select, joins, whereMap);
+		select.append(" ").append(where.getWherePrams());
+		whereMap.put("_sql", select.toString());
+		logger.debug("SQL => \n{}", FormatStyle.BASIC.getFormatter().format(select.toString()));
+		List<Map<String, Object>> selectList = sqlSessionTemplate.selectList("excuteQuerySql", whereMap);
+		long count = 0;
+		if (!selectList.isEmpty()){
+			count = (Long)selectList.get(0).get("COUNT");
+		}
+		where.limit((page - 1) * size, size);
+		List<T> list = list(where, joins);
+		return new ResultPage<>(count, page, size, list);
+	}
 
 	@Override
 	public List<T> list(String sql, Object... params) {
@@ -480,6 +513,61 @@ public class BaseDaoImpl<T extends PO, PK extends Serializable> implements BaseD
 			selectSql.append("FROM ").append(tableName());
 		}
 		return selectSql;
+	}
+
+	/**
+	 * 获得带有外表的SQL查询字段语句
+	 * @param joins
+	 * @return
+	 */
+	private StringBuffer getSelectSqlByOtherTable(LeftJoin joins, Map<String, Object> params){
+		StringBuffer select_ = new StringBuffer("SELECT ");
+		for (int i = 0; i < selectSqlParms.size(); i++) {
+			select_.append(tableName() + "." + selectSqlParms.get(i).getDbField())
+					.append(" AS ").append(selectSqlParms.get(i).getField().getName());
+			if(i < selectSqlParms.size() -1){
+				select_.append(",");
+			}else{
+				select_.append(" ");
+			}
+		}
+		List<LeftJoin.JoinItem> items = joins.getItems();
+		for (int i = 0; i < items.size(); i++){
+			LeftJoin.JoinItem joinItem = items.get(i);
+			for (int j = 0; j < joinItem.getJoinFields().length; j++){
+				select_.append(",");
+				String beanName = LambdaUtil.getBeanName(joinItem.getJoinFields()[i]);
+				if (beanName.contains(".")){
+					beanName = beanName.substring(beanName.indexOf("."));
+				}
+				select_.append(LambdaUtil.getTableName(joinItem.getJoinFields()[j]))
+					.append(" AS ").append(beanName);
+			}
+		}
+		select_ = new StringBuffer(select_.substring(0, select_.length() - 1));
+		select_.append(" FROM ").append(tableName() + " AS " + tableName());
+		getSelectTableSqlByOtherTable(select_, joins, params);
+		return select_;
+	}
+
+	private StringBuffer getSelectTableSqlByOtherTable(StringBuffer select_, LeftJoin joins, Map<String, Object> params){
+		List<LeftJoin.JoinItem> items = joins.getItems();
+		for (int i = 0; i < items.size(); i++){
+			LeftJoin.JoinItem joinItem = items.get(i);
+			select_.append(" LEFT JOIN ").append(sqlUtil.getTableName(joinItem.getClazz())).append(" ");
+			String wherePrams = joinItem.getOn().getWherePrams();
+			Map<String, Object> whereMap = joinItem.getOn().getWhereMap();
+			int size = params.keySet().size();
+			for (String key: whereMap.keySet()){
+				Object o = whereMap.get(key);
+				String newKey = String.format("#{param_%s}", String.valueOf(size));
+				wherePrams.replace(String.format("#{%s}", key), newKey);
+				params.put("param_" + size, o);
+				size ++;
+			}
+			select_.append("ON ").append(joinItem.getOn().getWherePrams().substring(5));
+		}
+		return select_;
 	}
 
 	public String selectSql(){
