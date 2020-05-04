@@ -544,7 +544,6 @@ public class BaseDaoImpl<T extends PO, PK extends Serializable> implements BaseD
 					.append(" AS ").append(beanName);
 			}
 		}
-		select_ = new StringBuffer(select_.substring(0, select_.length() - 1));
 		select_.append(" FROM ").append(tableName() + " AS " + tableName());
 		getSelectTableSqlByOtherTable(select_, joins, params);
 		return select_;
