@@ -18,6 +18,9 @@ public class LeftJoin {
 
     private LeftJoin(){}
 
+
+    @SuppressWarnings({"unchecked", "varargs"})
+    @SafeVarargs
     public static <T> LeftJoin join(Class<? extends PO> clazz, WherePrams on, SFunction<T, ?>... joinFields){
         LeftJoin leftJoin = new LeftJoin();
         JoinItem joinItem = new JoinItem();
@@ -28,7 +31,9 @@ public class LeftJoin {
         return leftJoin;
     }
 
-    public <T> LeftJoin append(Class<? extends PO> clazz, WherePrams on, SFunction<T, ?>... joinFields){
+    @SuppressWarnings({"varargs"})
+    @SafeVarargs
+    public final <T> LeftJoin append(Class<? extends PO> clazz, WherePrams on, SFunction<T, ?>... joinFields){
         JoinItem joinItem = new JoinItem();
         joinItem.setClazz(clazz);
         joinItem.setOn(on);
