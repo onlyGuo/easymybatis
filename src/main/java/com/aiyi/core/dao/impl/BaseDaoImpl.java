@@ -536,7 +536,7 @@ public class BaseDaoImpl<T extends PO, PK extends Serializable> implements BaseD
 			LeftJoin.JoinItem joinItem = items.get(i);
 			for (int j = 0; j < joinItem.getJoinFields().length; j++){
 				select_.append(",");
-				String beanName = LambdaUtil.getBeanName(joinItem.getJoinFields()[i]);
+				String beanName = LambdaUtil.getBeanName(joinItem.getJoinFields()[j]);
 				if (beanName.contains(".")){
 					beanName = beanName.substring(beanName.indexOf("."));
 				}
