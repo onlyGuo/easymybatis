@@ -40,7 +40,7 @@
     <version>0.2.0.RELEASE</version>
 </dependency>
 ````
-aaa
+bbb
 #### 通过Gradle直接引入
 ````
 implementation 'com.easymybatis.freamwork:spring-easymybatis-core:0.2.0.RELEASE'
