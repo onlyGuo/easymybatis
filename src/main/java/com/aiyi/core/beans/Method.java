@@ -25,8 +25,8 @@ public class Method {
 	 * @return
 	 */
 	public static <T, J> WherePrams where(SFunction<T, ?> fieldName, C c, SFunction<J, ?>  value) {
-		String tableFieldName = LambdaUtil.getTableName(value);
-		return new WherePrams(fieldName , c , tableFieldName);
+//		String tableFieldName = LambdaUtil.getTableName(value);
+		return new WherePrams(fieldName , c , value);
 	}
 
 	/**

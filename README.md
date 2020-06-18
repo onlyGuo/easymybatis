@@ -39,12 +39,12 @@
 <dependency>
     <groupId>com.easymybatis.freamwork</groupId>
     <artifactId>spring-easymybatis-core</artifactId>
-    <version>0.2.0.RELEASE</version>
+    <version>0.2.2.RELEASE</version>
 </dependency>
 ````
 #### 通过Gradle直接引入
 ````
-implementation 'com.easymybatis.freamwork:spring-easymybatis-core:0.2.0.RELEASE'
+implementation 'com.easymybatis.freamwork:spring-easymybatis-core:0.2.2.RELEASE'
 ````
 
 

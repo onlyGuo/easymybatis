@@ -17,7 +17,7 @@ public class Script {
      * @return
      */
     public Script append(String sql){
-        this.buffer.append(sql);
+        this.buffer.append(sql).append(" ");
         return this;
     }
 
@@ -31,7 +31,7 @@ public class Script {
     public static Script of(String... sqls){
         Script script = new Script();
         for(String sql: sqls){
-            script.append(sql);
+            script.append(sql).append(" ");
         }
         return script;
     }

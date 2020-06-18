@@ -87,6 +87,10 @@ public class BaseDaoImpl<T extends PO, PK extends Serializable> implements BaseD
         
         this.idType = this.sqlUtil.getIdType(this.entityClass);
 
+        getSelectSql();
+		insertSql();
+		updateSql();
+
         logger.info("Init" + getClass().toString());
 	}
 

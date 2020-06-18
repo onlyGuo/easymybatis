@@ -96,10 +96,18 @@ public class WherePrams {
 	 */
 	private StringBuffer parseWhereExpression(String field, C c, Object value){
 		String where = parseComparator(c, value);
-		if (value.toString().contains(".")){
-			return new StringBuffer(field).append(" ").append(where).append(" ")
-					.append(value);
+		if (null != value){
+			if (value instanceof SFunction){
+				String v = LambdaUtil.getTableName((SFunction)value);
+				return new StringBuffer(field).append(" ").append(where).append(" ")
+						.append(v);
+			}
+			if (value instanceof Script){
+				return new StringBuffer(field).append(" ").append(where).append(" ")
+						.append(value.toString());
+			}
 		}
+
 		String index = String.valueOf(whereMap.size());
 		if (c == C.LIKE){
 			whereMap.put(String.format("param_%s", index), "%" + value + "%");
@@ -203,8 +211,8 @@ public class WherePrams {
 
 	public <T, J> WherePrams and(SFunction<T, ?> field, C c, SFunction<J, ?> value) {
 		String tableName = LambdaUtil.getTableName(field);
-		String v = LambdaUtil.getTableName(value);
-		StringBuffer buffer = parseWhereExpression(tableName, c, v);
+//		String v = LambdaUtil.getTableName(value);
+		StringBuffer buffer = parseWhereExpression(tableName, c, value);
 		this.pram.append(" AND ").append(buffer);
 		return this;
 	}
@@ -343,7 +351,7 @@ public class WherePrams {
 
 	@Override
 	public String toString() {
-		return "WherePrams [pram=" + pram + "]";
+		return getWherePrams();
 	}
 	
 	/**
