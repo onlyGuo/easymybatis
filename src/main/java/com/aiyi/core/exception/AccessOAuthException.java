@@ -9,7 +9,7 @@ package com.aiyi.core.exception;
  * @ModificationHistory Who When What ---------- ------------- -----------------------------------
  * 郭胜凯 2018/5/6
  */
-public class AccessOAuthException extends RuntimeException {
+public class AccessOAuthException extends FlowException {
   public AccessOAuthException(){
     super("无访问权限!");
   }

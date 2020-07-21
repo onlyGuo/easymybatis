@@ -9,7 +9,7 @@ package com.aiyi.core.exception;
  * @ModificationHistory Who When What ---------- ------------- -----------------------------------
  * 郭胜凯 2018/5/6
  */
-public class RequestParamException extends RuntimeException {
+public class RequestParamException extends BadRequestException {
   public RequestParamException(){
     super("请求参数有误!");
   }
