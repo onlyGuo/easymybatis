@@ -100,7 +100,7 @@ public class BaseDaoImpl<T extends PO, PK extends Serializable> implements BaseD
 
 		List<Pram> pramList = SqlUtil.getPramListofStatic(po);
 		PK pkValue = null;
-		if (idType.indexOf("String") != -1){
+		if (null != idType && idType.contains("String")){
 			Pram pa = new Pram();
 			pa.setDbField(idName);
 			pkValue = getId();
@@ -457,7 +457,7 @@ public class BaseDaoImpl<T extends PO, PK extends Serializable> implements BaseD
 			StringBuffer buffer = new StringBuffer();
 			StringBuffer valueBuffer = new StringBuffer("(");
 			List<Pram> pramList = SqlUtil.getParamListCommon(po, true);
-			if (idType.indexOf("String") != -1){
+			if (null != idType && idType.contains("String")){
 				Pram pa = new Pram();
 				pa.setDbField(idName);
 				pramList.add(pa);
