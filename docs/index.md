@@ -193,6 +193,22 @@ where.orderBy("age_num desc");
 // 的前十条
 where.limit(0, 10);
 ````
+#### 解决Method表达式中的硬编码
+> 以上示例中都存在了字段的硬编码, 这与EasyMybatis的原则相违背, 因此建议使用EasyMybatis提供的SFun进行强约束编程.
+
+以上代码适当修改后如下示例:
+````java
+// 18岁的人群
+WherePrams where = Method.where(PersionPO:getAgeNum, C.EQ, 18);
+// 中的小姐姐
+where.and(PersionPO:getSex, C.EQ, 0);
+// 按照年龄倒序
+where.orderBy(Sort.of(PersionPO:getAgeNum, OrderBy.DESC));
+// 的前十条
+where.limit(0, 10);
+````
+
+
 > 当不确定首要条件的时候, 可以用createDefault()方法创建一个无目标的表达式.
 
 示例(当传入年龄 <= 18时, 取出10个18岁小姐姐, 否则取出20个指定年龄的小哥哥)
@@ -201,9 +217,9 @@ public List<PersionPO> list(int age){
     WherePrams where = Method.createDefault();
     
     if(age <= 18){
-        where.and("age_num", C.EQ, 18).and("sex", C.EQ, 0).limit(0, 10);
+        where.and(PersionPO:getAgeNum, C.EQ, 18).and(PersionPO:getSex, C.EQ, 0).limit(0, 10);
     }else{
-        where.and("age_num", C.EQ, age).and("sex", C.EQ, 1).limit(0, 20);
+        where.and(PersionPO:getAgeNum, C.EQ, age).and(PersionPO:getSex, C.EQ, 1).limit(0, 20);
     }
     
     return persionDao.list(where);
