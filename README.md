@@ -302,5 +302,46 @@ Method.where("id", C.IN,
     Script.of("SELECT parentId FROM ", tableName(), " ", Method.where("sex", 1))
 ).limit(1, 10);
 ````
+## 如何使用缓存?
+EasyMybatis内置了本地缓存工具类, 可以临时缓存一些内容, 适用于轻量级开发.
+需要注意的是,缓存的内容不会进行持久化, 当项目重启后, 缓存会丢失.
+- 简单的缓存示例
 
-待续...
+缓存用户信息2小时, 定义Key的前缀是"CACHE_LOGIN_KEY", 后面跟TOKEN(例如: abc), 那么他的Key是`CACHE_LOGIN_KEY:abc`
+
+可以使用util.cache.Key对象构建:
+
+``` java 
+Key.as(String ... keys)
+```
+
+代码实例
+```java
+User user = new User();
+CacheUtil.put(Key.as("CACHE_LOGIN_KEY", "abc"), user, TimeUnit.HOURS, 2);
+```
+- 带有回调的缓存
+
+定义一个Runnable, 当缓存失效时, 输出`Over!`
+```java
+User user = new User();
+CacheUtil.put(Key.as("CACHE_LOGIN_KEY", "abc"), user, TimeUnit.HOURS, 2, () -> {
+    System.out.println("Over!");
+});
+```
+
+## 带有强约束的排序方法
+当查询条件中使用SFunction进行字段约束时, 对应的排序方法也应使用强约束.
+可以使用`Sort`构建一个强约束的排序规则.
+
+假设查询姓名中包含'张'的用户, 并且将结果按照姓名字段倒序排列, 当姓名一致时,再根据ID进行正序排列.
+
+实例:
+```java
+Method.where(User::getName, C.LIKE, '张')
+    .orderBy(
+        Sort.of(User:getName, OrderBy.DESC).and(User:getId, OrderBy.ASC)
+    );
+```
+
+... 待续
