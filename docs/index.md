@@ -148,6 +148,35 @@ public class PersionServiceImpl implements PersionService {
     }
 }
 ````
+此外, easymybatis 已经提供了分页查询的方法, 因此, 以上代码可以写成这样:
+````java
+/**
+ * @author gsk 
+ */
+@Service
+public class PersionServiceImpl implements PersionService {
+    
+    @Resource
+    private PersionDao persionDao;
+    
+    /**
+     * 列出年轻的小姐姐列表, 并案年龄倒序排序
+     * @param pageNum
+     *      页码
+     * @param length
+     *      每页长度
+     * @return 
+     */
+    public ResultPage<PersionPO> listYoungGirl(int pageNum, int length){
+        // 18岁及18岁以下的定义为年轻, sex = 0 定义为女
+        return persionDao.list(Method
+            .where("age_num", C.XE, 18)
+            .and("sex", C.EQ, 0)
+            .orderBy("age_num desc"), pageNum, length);
+    }
+}
+````
+`ResultPage` 是一个泛型的Bean容器, 中包含一个`list`, `thisPage`, `totalPageSize`, `totalSize`, `pageSize`等字段
 #### DAO中的Method表达式
 > DAO中, 大部分的操作会用到Method表达式, Method表达式为链式操作, 且不用在意顺序. 
 可以根据业务判断和流程在不同的场景中动态构建你所需的`SQL WHERE 表达式`, 它表达了我们要查询的数据库的目标.
