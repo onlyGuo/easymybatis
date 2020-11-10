@@ -280,7 +280,7 @@ public ResultPage<ArticleComment> list(String keyword, Integer status, int page,
 ````
 执行此段代码时, 开启DEBUG级别日志, 并开启SQL格式化, 可以看到SQL执行结果为:
 ````sql
-2020-11-10 12:34:22.531 DEBUG 28226 --- [nio-8080-exec-4] com.aiyi.blog.dao.ArticleCommentDao      : SQL => 
+2020-11-10 12:52:14.967 DEBUG 28226 --- [nio-8080-exec-5] com.aiyi.blog.dao.ArticleCommentDao      : SQL => 
 
     SELECT
         blog_article_comment.id AS id,
@@ -299,7 +299,13 @@ public ResultPage<ArticleComment> list(String keyword, Integer status, int page,
         blog_article 
             ON  blog_article.id = blog_article_comment.article_id 
     WHERE
-        blog_article_comment.deleted = #{param_0} LIMIT 0 , 10 
+        blog_article_comment.deleted = #{param_0} 
+        AND (
+            blog_article_comment.content like #{param_2} 
+            OR blog_article_comment.nicker like #{param_3} 
+            OR blog_article_comment.email like #{param_3}
+        ) LIMIT 0 , 10 
+
 ````
 #### DAO 的高级用法(自定义SQL)
 - 用法一, 封装自定义SQL
