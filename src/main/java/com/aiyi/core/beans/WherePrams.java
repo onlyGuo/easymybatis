@@ -96,6 +96,9 @@ public class WherePrams {
 	 */
 	private StringBuffer parseWhereExpression(String field, C c, Object value){
 		String where = parseComparator(c, value);
+		if (field.equalsIgnoreCase("DESC") || field.equalsIgnoreCase("ASC") || field.equalsIgnoreCase("LIMIT")){
+			field = "`" + field + "`";
+		}
 		if (null != value){
 			if (value instanceof SFunction){
 				String v = LambdaUtil.getTableName((SFunction)value);
