@@ -225,6 +225,81 @@ public List<PersionPO> list(int age){
     return persionDao.list(where);
 }
 ````
+#### DAO 的高级用法(联表查询)
+> 通常情况下, 在一些稍微复杂的场景中, 会用到联表. EasyMybatis当前提供了基于Left Join的联表查询方案.
+只需要在查询方法中加入以下表达式:
+
+````java
+Join.LeftJoin(
+    <T extends PO> <T>Class 外表class, 
+    WhereParams 关联条件, 
+    SFunction 预JOIN的外表字段
+);
+````
+比如如下需求需根据条件列出所有文章的评论列表, 并且评论列表中要携带它对应文章的标题, 需要查询如下数据:
+
+| 评论ID | 回复人ID | 所属文章标题 | 发言人昵称 | 发言人电子邮箱 | 发布内容 | 发布时间 |
+|  ----  | ----  | ----  | ----  | ----  | ----  | ----  |
+|...|...|...|...|...|...|...|
+一致文章表和评论表, 评论表中有所属文章ID, 需要通过文章ID将文章标题查询出来放到评论列表中.
+````java
+// 首先评论列表实体类中应加入`title`字段, 这个字段与文章实体中的title对应, 并标注`@Template`注解
+@TempField
+private String title;
+````
+
+代码示例:
+````java
+/**
+ * 列出评论列表
+ * @param keyword
+ *      关键字
+ * @param deleted
+ *      是否已删除
+ * @param page
+ *      页码
+ * @param limit
+ *      每页条数
+ * @return
+ */
+@Override
+public ResultPage<ArticleComment> list(String keyword, Integer status, int page, int limit) {
+    WherePrams where = Method.where(ArticleComment::isDeleted, C.EQ, false);
+    if (null != status && 2 != status){
+        where.and(ArticleComment::getStatus, C.EQ, status);
+    }
+    if (!StringUtils.isEmpty(keyword)){
+        where.and(Method.where(ArticleComment::getContent, C.LIKE, keyword)
+                .or(ArticleComment::getNicker, C.LIKE, keyword).or(ArticleComment::getEmail, C.LIKE, keyword));
+    }
+    return articleCommentDao.list(where,
+            LeftJoin.join(Article.class, Method.where(Article::getId, C.EQ, ArticleComment::getArticleId),
+                    Article::getTitle),page, limit);
+}
+````
+执行此段代码时, 开启DEBUG级别日志, 并开启SQL格式化, 可以看到SQL执行结果为:
+````sql
+2020-11-10 12:34:22.531 DEBUG 28226 --- [nio-8080-exec-4] com.aiyi.blog.dao.ArticleCommentDao      : SQL => 
+
+    SELECT
+        blog_article_comment.id AS id,
+        blog_article_comment.article_id AS articleId,
+        blog_article_comment.parent_id AS parentId,
+        blog_article_comment.nicker AS nicker,
+        blog_article_comment.email AS email,
+        blog_article_comment.content AS content,
+        blog_article_comment.create_time AS createTime,
+        blog_article_comment.status AS status,
+        blog_article_comment.deleted AS deleted ,
+        blog_article.title AS title 
+    FROM
+        blog_article_comment AS blog_article_comment 
+    LEFT JOIN
+        blog_article 
+            ON  blog_article.id = blog_article_comment.article_id 
+    WHERE
+        blog_article_comment.deleted = #{param_0} LIMIT 0 , 10 
+````
 #### DAO 的高级用法(自定义SQL)
 - 用法一, 封装自定义SQL
 
