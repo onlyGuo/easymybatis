@@ -340,11 +340,32 @@ public class WherePrams {
 		return limit;
 	}
 
+	/**
+	 * 排序
+	 * @param order
+	 * 		排序规则
+	 * @return
+	 */
 	public WherePrams orderBy(String order){
 		if(this.orderBy != null){
 			this.orderBy += "," + order;
 		}else{
 			this.orderBy = order;
+		}
+		return this;
+	}
+
+	/**
+	 * 具有严格字段约束的排序
+	 * @param sort
+	 * 		排序规则包装类
+	 * @return
+	 */
+	public WherePrams orderBy(Sort sort){
+		if(this.orderBy != null){
+			this.orderBy += "," + sort.toString();
+		}else{
+			this.orderBy = sort.toString();
 		}
 		return this;
 	}
