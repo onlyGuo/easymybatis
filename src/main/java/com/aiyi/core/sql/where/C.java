@@ -10,7 +10,8 @@ public enum C {
 	 */
 	EQ("=", "等于"),
 	NE("<>", "不等于"),
-	LIKE("like", "相似"),
+	LIKE("LIKE", "相似"),
+	NLIKE("NOT LIKE", "字段中不包含"),
 	DA(">", "大于"),
 	XIAO("<", "小于"),
 	IN( "IN", "在XXX内"),
