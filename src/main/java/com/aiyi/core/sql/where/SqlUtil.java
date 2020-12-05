@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.*;
@@ -320,6 +321,8 @@ public class SqlUtil<T extends PO> {
 						throw new RuntimeException(e);
 					}
 					v = sb.toString();
+				}else if (fileValue instanceof byte[]){
+					v = new String((byte[])fileValue, StandardCharsets.UTF_8);
 				}
 				writeMethod.invoke(po, v);
 			}else{
