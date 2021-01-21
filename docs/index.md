@@ -37,13 +37,13 @@
 <dependency>
     <groupId>com.easymybatis.freamwork</groupId>
     <artifactId>spring-easymybatis-core</artifactId>
-    <version>0.2.9.RELEASE</version>
+    <version>0.3.0.RELEASE</version>
 </dependency>
 ````
 bbb
 #### 通过Gradle直接引入
 ````
-implementation 'com.easymybatis.freamwork:spring-easymybatis-core:0.2.7.RELEASE'
+implementation 'com.easymybatis.freamwork:spring-easymybatis-core:0.3.0.RELEASE'
 ````
 
 #### 拉取本项目的GitHub代码, 编译并安装到你的项目中

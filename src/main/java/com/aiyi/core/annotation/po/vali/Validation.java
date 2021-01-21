@@ -19,6 +19,8 @@ import java.lang.annotation.*;
 public @interface Validation {
   // 较严格式
   ValidationType value() default ValidationType.Not;
+  // 自定义正则
+  String regex() default "";
   // 最大长度, 0 = 不校验
   int maxLength() default 0;
   // 最小长度, 0 = 不校验

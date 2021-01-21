@@ -1,6 +1,8 @@
 package com.aiyi.core.test;
 
 import com.aiyi.core.annotation.po.TableName;
+import com.aiyi.core.annotation.po.vali.Validation;
+import com.aiyi.core.annotation.po.vali.enums.ValidationType;
 import com.aiyi.core.beans.PO;
 
 /**
@@ -13,6 +15,7 @@ import com.aiyi.core.beans.PO;
 public class TestTable1PO extends PO {
     private int id;
 
+    @Validation(value = ValidationType.SafeChars)
     private String name;
 
     private int age;

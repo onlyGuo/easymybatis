@@ -33,11 +33,17 @@ public enum ValidationType {
   // 中国邮政编码校验
   Postcode("[1-9]\\d{5}"),
   // IP地址校验
-  IpAddress("[1-9](\\d{1,2})?\\.(0|([1-9](\\d{1,2})?))\\.(0|([1-9](\\d{1,2})?))\\.(0|([1-9](\\d{1,2})?))");
+  IpAddress("[1-9](\\d{1,2})?\\.(0|([1-9](\\d{1,2})?))\\.(0|([1-9](\\d{1,2})?))\\.(0|([1-9](\\d{1,2})?))"),
+  // 安全的文件名
+  SafeFileName("[\\w0-9\u4e00-\u9fa5\\.\\。\\(\\)\\（\\）\\!\\！\\@\\#\\$\\%\\+\\=\\-\\[\\]]+$"),
+  // 安全字符
+  SafeChars("[\\w0-9]+$"),
+  // 带有中文的安全自负
+  SafeCharsAndChinese("[\\w0-9\u4e00-\u9fa5]+$");
 
   private String regex;
 
-  private ValidationType(String regex){
+  ValidationType(String regex){
     this.regex = regex;
   }
 
