@@ -161,8 +161,8 @@ public class BaseDaoImpl<T extends PO, PK extends Serializable> implements BaseD
 
 		logger.debug("SQL => \n{}", FormatStyle.BASIC.getFormatter().format(sql.toString()));
 		Map<String, Object> resultMap = sqlSessionTemplate.selectOne(
-				"excuteQuerySql", sql);
-		return (Serializable) resultMap.get(fileName);
+				"excuteQuerySql", paramMap);
+		return (Serializable) resultMap.get("f_1");
 	}
 
 	@Override
