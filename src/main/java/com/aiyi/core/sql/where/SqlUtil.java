@@ -3,6 +3,9 @@ package com.aiyi.core.sql.where;
 import com.aiyi.core.annotation.po.*;
 import com.aiyi.core.beans.PO;
 import com.aiyi.core.beans.Pram;
+import com.aiyi.core.exception.ServiceInvokeException;
+import com.alibaba.fastjson.JSON;
+
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
@@ -342,7 +345,17 @@ public class SqlUtil<T extends PO> {
         for(Field field: declaredFields){
             if (field.getName().toUpperCase().equalsIgnoreCase(fileName)){
             	if (field.getAnnotation(DateTime.class) != null){
-					return setFileValue(po, field.getName(), new Date(Long.valueOf(fileValue.toString())));
+					return setFileValue(po, field.getName(), new Date(Long.parseLong(fileValue.toString())));
+				}
+				JsonField annotation = field.getAnnotation(JsonField.class);
+				if (null != annotation){
+					field.setAccessible(true);
+					try {
+						field.set(po, JSON.parseObject(fileValue.toString(), field.getType()));
+						return true;
+					} catch (IllegalAccessException e) {
+						throw new ServiceInvokeException("字段赋值失败:" + e.getMessage(), e);
+					}
 				}
                 return setFileValue(po, field.getName(), fileValue);
             }

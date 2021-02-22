@@ -1,5 +1,6 @@
 package com.aiyi.core.dao.impl;
 
+import com.aiyi.core.annotation.po.JsonField;
 import com.aiyi.core.beans.*;
 import com.aiyi.core.dao.BaseDao;
 import com.aiyi.core.exception.ServiceInvokeException;
@@ -8,6 +9,7 @@ import com.aiyi.core.sql.where.SqlUtil;
 import com.aiyi.core.util.GenericsUtils;
 import com.aiyi.core.util.hibernate.jdbc.util.FormatStyle;
 import com.aiyi.core.util.lambda.LambdaUtil;
+import com.alibaba.fastjson.JSON;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,7 +111,13 @@ public class BaseDaoImpl<T extends PO, PK extends Serializable> implements BaseD
 		}
 
 		for (int i = 0; i < pramList.size(); i++) {
-			paramMap.put(String.format("param_%s", String.valueOf(i)), pramList.get(i).getValue());
+			JsonField annotation = pramList.get(i).getField().getAnnotation(JsonField.class);
+			if (null != annotation){
+				paramMap.put(String.format("param_%s", String.valueOf(i)), JSON.toJSONString(pramList.get(i).getValue()));
+			}else{
+				paramMap.put(String.format("param_%s", String.valueOf(i)), pramList.get(i).getValue());
+			}
+
 		}
 
 		logger.debug("SQL => \n{}", FormatStyle.BASIC.getFormatter().format(insertSql.toString()));
