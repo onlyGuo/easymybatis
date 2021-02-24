@@ -568,8 +568,8 @@ public class BaseDaoImpl<T extends PO, PK extends Serializable> implements BaseD
 			int size = params.keySet().size();
 			for (String key: whereMap.keySet()){
 				Object o = whereMap.get(key);
-				String newKey = String.format("#{param_%s}", String.valueOf(size));
-				wherePrams.replace(String.format("#{%s}", key), newKey);
+				String newKey = String.format("#{param_%s}", size);
+				wherePrams = wherePrams.replace(String.format("#{%s}", key), newKey);
 				params.put("param_" + size, o);
 				size ++;
 			}
