@@ -1,5 +1,7 @@
 package com.aiyi.core.util.cache;
 
+import com.aiyi.core.exception.ServiceInvokeException;
+import com.aiyi.core.exception.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,7 +9,7 @@ import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * 缓存工具类
@@ -15,7 +17,12 @@ import java.util.concurrent.TimeUnit;
 public class CacheUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(CacheUtil.class);
-
+    private static Executor executor = Executors.newSingleThreadExecutor(new ThreadFactory() {
+        @Override
+        public Thread newThread(Runnable r) {
+            return new Thread(r, "Cache-Local-Lock-Executor");
+        }
+    });
     private static final Map<String, CacheItem> cacheItemMap = new HashMap<>();
     static {
         new Thread(() -> {
@@ -142,4 +149,55 @@ public class CacheUtil {
         put(key, null, TimeUnit.MILLISECONDS, 0);
     }
 
+    /**
+     * 全局业务锁
+     * @param runner
+     *      业务处理内容
+     */
+    public static <T> T lock(LockRunner<T> runner){
+        return lock(5000, Key.as(".default"), runner);
+    }
+
+    /**
+     * 指定业务空间的业务锁
+     * @param key
+     *      业务空间KEY
+     * @param runner
+     *      业务处理内容
+     */
+    public static <T> T lock(Key key, LockRunner<T> runner){
+        return lock(5000, key, runner);
+    }
+
+    /**
+     * 指定业务空间和处理超时时间的业务锁
+     * @param time
+     *      超时时间
+     * @param key
+     *      业务空间KEY
+     * @param runner
+     *      业务处理内容
+     */
+    public static <T> T lock(long time, Key key, LockRunner<T> runner){
+        key = Key.as("LOCAL.LOCK.TASK", key.toString());
+        Integer integer = get(key, Integer.class);
+        if (null != integer){
+            throw new ValidationException("操作过于频繁");
+        }
+        put(key, 1, TimeUnit.MILLISECONDS, time);
+
+        FutureTask<T> future=new FutureTask<>(runner::exec);
+        executor.execute(future);
+
+        try{
+            return future.get(time, TimeUnit.MILLISECONDS);
+        }catch (InterruptedException| ExecutionException e) {
+            throw new ServiceInvokeException(e.getMessage(), e);
+        }catch (TimeoutException e) {
+            throw new ServiceInvokeException("业务执行超时", e);
+        }finally {
+            expire(key);
+            future.cancel(true);
+        }
+    }
 }

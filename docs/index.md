@@ -37,13 +37,13 @@
 <dependency>
     <groupId>com.easymybatis.freamwork</groupId>
     <artifactId>spring-easymybatis-core</artifactId>
-    <version>0.3.3.RELEASE</version>
+    <version>0.3.4.RELEASE</version>
 </dependency>
 ````
 bbb
 #### 通过Gradle直接引入
 ````
-implementation 'com.easymybatis.freamwork:spring-easymybatis-core:0.3.3.RELEASE'
+implementation 'com.easymybatis.freamwork:spring-easymybatis-core:0.3.4.RELEASE'
 ````
 
 #### 拉取本项目的GitHub代码, 编译并安装到你的项目中
@@ -468,5 +468,34 @@ Method.where(User::getName, C.LIKE, '张')
         Sort.of(User:getName, OrderBy.DESC).and(User:getId, OrderBy.ASC)
     );
 ```
-
+## 业务锁
+注意：这里的业务锁为本地业务锁，不可用于分布式，若需要分布式锁，可以配合Redis实现。
+业务锁使用方式：
+````java
+CacheUtil.lock(Key.as("锁的KEY，不同的KEY之间的锁不会干扰，一般情况为业务的形参"),() -> {
+    // 锁的代码
+});
+````
+示例：
+````java
+public void registerUser(User user){
+    // 在锁内执行防止并发重复注册
+    CacheUtil.lock(Key.as("Register", user.getUsername),() -> {
+        User dbUser = userDao.get(Method.where(User::getUsername, C.EQ, user.getUsername());
+        if(null != dbUser){
+            throw new ValidationException("该用户名已被注册");
+        }
+    });
+    // 执行后续业务
+    userDao.add(user);
+}
+````
+lock方法可以设定超时时间
+````java
+CacheUtil.lock(超时时间毫秒，锁的KEY, 锁内业务实现代码);
+````
+lock默认的业务key为".default", 若不指定KEY，则使用默认key，也就是全局业务的锁
+````java
+CacheUtil.lock(锁内业务实现代码);
+````
 ... 待续

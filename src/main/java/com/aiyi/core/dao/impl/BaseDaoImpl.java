@@ -573,7 +573,7 @@ public class BaseDaoImpl<T extends PO, PK extends Serializable> implements BaseD
 				params.put("param_" + size, o);
 				size ++;
 			}
-			select_.append("ON ").append(joinItem.getOn().getWherePrams().substring(5));
+			select_.append("ON ").append(wherePrams.substring(5));
 		}
 		return select_;
 	}
