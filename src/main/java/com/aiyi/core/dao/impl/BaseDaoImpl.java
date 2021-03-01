@@ -113,9 +113,9 @@ public class BaseDaoImpl<T extends PO, PK extends Serializable> implements BaseD
 		for (int i = 0; i < pramList.size(); i++) {
 			JsonField annotation = pramList.get(i).getField().getAnnotation(JsonField.class);
 			if (null != annotation){
-				paramMap.put(String.format("param_%s", String.valueOf(i)), JSON.toJSONString(pramList.get(i).getValue()));
+				paramMap.put(String.format("param_%s", i), JSON.toJSONString(pramList.get(i).getValue()));
 			}else{
-				paramMap.put(String.format("param_%s", String.valueOf(i)), pramList.get(i).getValue());
+				paramMap.put(String.format("param_%s", i), pramList.get(i).getValue());
 			}
 
 		}
@@ -280,7 +280,13 @@ public class BaseDaoImpl<T extends PO, PK extends Serializable> implements BaseD
 		List<Pram> prams = sqlUtil.getPramList(po);
 
 		for (int i = 0; i < prams.size(); i++) {
-			paramMap.put("param_" + i, prams.get(i).getValue());
+			JsonField annotation = prams.get(i).getField().getAnnotation(JsonField.class);
+			if (null != annotation){
+				paramMap.put("param_" + i, JSON.toJSONString(prams.get(i).getValue()));
+			}else{
+				paramMap.put("param_" + i, prams.get(i).getValue());
+			}
+
 		}
 		paramMap.put("id", id);
 		logger.debug("SQL => \n{}", FormatStyle.BASIC.getFormatter().format(sql.toString()));

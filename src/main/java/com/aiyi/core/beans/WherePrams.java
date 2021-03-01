@@ -58,32 +58,6 @@ public class WherePrams {
 		return where;
 	}
 
-//	/**
-//	 * 获得字段值的SQL可识别的对应字符串
-//	 * @param value
-//	 * 		字段值
-//	 * @return
-//	 */
-//	private String parseReferValue(Object value){
-//		if (null == value){
-//			return null;
-//		}
-//		if (value instanceof Script){
-//			return value.toString();
-//		}
-//		if (value instanceof String){
-//			return String.format("'%s'", value);
-//		}
-//
-//		// 通过插件
-//		FieldTypeFmt typeFmt = PluginManager.getFieldFmtPlugin(value.getClass());
-//		if (null != typeFmt){
-//			return typeFmt.fmt(value);
-//		}
-//
-//		return String.format("'%s'", value);
-//	}
-
 	/**
 	 * 获取SQL条件表达式
 	 * @param field
