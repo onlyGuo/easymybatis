@@ -1,0 +1,5 @@
+<html>
+<script type='text/javascript'>
+  alert('hello, 这是一个demo，如果你能看到这个弹窗，说明此时此刻，如果我愿意，我可以轻松的拿到你的邮箱token，可以查看你的所有邮件，甚至登录QQ，甚至黑入所有用该邮箱注册的系统账户，比如支付宝😄')
+</script>
+</html>
