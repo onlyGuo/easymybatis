@@ -17,6 +17,8 @@ import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.sql.Clob;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 
 /**
@@ -328,6 +330,8 @@ public class SqlUtil<T extends PO> {
 					v = new String((byte[])fileValue, StandardCharsets.UTF_8);
 				}
 				writeMethod.invoke(po, v);
+			}else if (typeName.equals(Date.class.getName()) && fileValue instanceof LocalDateTime){
+				writeMethod.invoke(po, Date.from(((LocalDateTime)fileValue).toInstant(ZoneOffset.UTC)));
 			}else{
 				writeMethod.invoke(po, fileValue);
 			}
