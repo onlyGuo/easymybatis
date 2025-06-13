@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="logo" height=320 width=640 src="https://www.easymybatis.com/logo.png">
+  <img alt="logo" height=320 width=640 src="https://github.com/onlyGuo/easymybatis/blob/master/docs/logo.png?raw=true">
 </p>
 
 <p align="center">
